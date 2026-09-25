@@ -1,0 +1,59 @@
+Target: http://lab4-cache-demo-alb-1557498670.us-east-1.elb.amazonaws.com
+Duration: 15s   Threads: 4   Connections: 50
+
+==============================================
+FASE 1: /wo_cache -- SIN CACHE (siempre pega a RDS)
+==============================================
+Running 15s test @ http://lab4-cache-demo-alb-1557498670.us-east-1.elb.amazonaws.com
+  4 threads and 50 connections
+  Thread Stats   Avg      Stdev     Max   +/- Stdev
+    Latency   450.89ms  319.07ms   1.86s    84.54%
+    Req/Sec    42.22     32.44   111.00     70.94%
+  Latency Distribution
+     50%  331.34ms
+     75%  493.62ms
+     90%  915.08ms
+     99%    1.74s 
+  1705 requests in 15.01s, 589.10KB read
+Requests/sec:    113.57
+Transfer/sec:     39.24KB
+
+Flushing Redis cache before the cold run ...
+done.
+
+==============================================
+FASE 2: /w_cache -- CACHE FRIA (recien flushed, casi todo MISS)
+==============================================
+Running 15s test @ http://lab4-cache-demo-alb-1557498670.us-east-1.elb.amazonaws.com
+  4 threads and 50 connections
+  Thread Stats   Avg      Stdev     Max   +/- Stdev
+    Latency   458.22ms  324.14ms   1.73s    64.55%
+    Req/Sec    37.88     27.78   120.00     63.10%
+  Latency Distribution
+     50%  340.26ms
+     75%  662.41ms
+     90%  987.90ms
+     99%    1.21s 
+  1524 requests in 17.88s, 511.13KB read
+  Socket errors: connect 0, read 0, write 0, timeout 48
+Requests/sec:     85.24
+Transfer/sec:     28.59KB
+
+==============================================
+FASE 3: /w_cache -- CACHE CALIENTE (mismo pool de ids, casi todo HIT)
+==============================================
+Running 15s test @ http://lab4-cache-demo-alb-1557498670.us-east-1.elb.amazonaws.com
+  4 threads and 50 connections
+  Thread Stats   Avg      Stdev     Max   +/- Stdev
+    Latency    79.49ms   20.32ms 239.92ms   95.13%
+    Req/Sec   152.71     25.21   220.00     70.18%
+  Latency Distribution
+     50%   74.84ms
+     75%   78.30ms
+     90%   84.24ms
+     99%  216.98ms
+  9114 requests in 15.10s, 2.97MB read
+Requests/sec:    603.62
+Transfer/sec:    201.43KB
+
+Listo. Compara 'Requests/sec' y 'Latency avg' entre las 3 fases.

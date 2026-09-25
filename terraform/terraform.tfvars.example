@@ -1,0 +1,9 @@
+# Copy this file to terraform.tfvars and adjust if needed.
+# Defaults already match a standard AWS Academy Learner Lab setup.
+
+aws_profile  = "academy"
+aws_region   = "us-east-1"
+project_name = "lab4-cache-demo"
+
+# Optional: cap Lambda concurrency to deliberately stress/throttle it under load.
+# lambda_reserved_concurrency = 5
